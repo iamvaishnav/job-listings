@@ -41,33 +41,50 @@ function applyFilters(tag) {
     let newEl = el.replace('%HTML%', tag.textContent)
     filterArea.insertAdjacentHTML('beforeend', newEl);
     closeBtn = document.querySelectorAll('.close');
-    console.log(closeBtn)
+    console.log(closeBtn);
+    closeTag();
 }
 
 // clear button
-clear.addEventListener('click', () => {
+clear.addEventListener('click', clearFilters)
+
+//function to clear filter container
+
+function clearFilters() {
     filterContainer.style.display = 'none';
     for (let i = 0; i < filterArea.childNodes.length;) {
         filterArea.childNodes[i].remove();
 
     }
     passArray.splice(0, passArray.length);
-})
+}
 
 //function to clear the tag
-/*
+
 function closeTag() {
     closeBtn.forEach(current => {
 
         current.addEventListener('click', (event) => {
-            console.log(current);
-            console.log(event);
+            if (event.target.classList.contains('close')) {
+
+
+                if (!(event.target.parentNode === filterArea.firstElementChild)) {
+                    event.target.parentNode.remove();
+                } else clearFilters();
+
+            } else {
+
+                if (!(event.target.parentNode.parentNode === filterArea.firstElementChild)) {
+                    event.target.parentNode.parentNode.remove();
+                } else clearFilters();
+
+
+            }
+
+
         })
-        console.error('not invoked yet')
+
     })
 
 
 }
-
-closeTag();
-*/
