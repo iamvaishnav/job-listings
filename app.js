@@ -23,16 +23,18 @@ const filterArea = document.querySelector('.filters');
 let closeBtn;
 let itemName;
 let passArray = [];
+
 tags.forEach(current => {
     current.addEventListener('click', () => {
 
         if (!(passArray.includes(current.textContent))) {
             applyFilters(current);
-            passArray.push(current.textContent)
+            passArray.push(current.textContent);
         }
-
     })
 })
+
+
 
 function applyFilters(tag) {
 
@@ -41,11 +43,12 @@ function applyFilters(tag) {
     let newEl = el.replace('%HTML%', tag.textContent)
     filterArea.insertAdjacentHTML('beforeend', newEl);
     closeBtn = document.querySelectorAll('.close');
-    console.log(closeBtn);
     closeTag();
+
 }
 
 // clear button
+
 clear.addEventListener('click', clearFilters)
 
 //function to clear filter container
@@ -62,29 +65,40 @@ function clearFilters() {
 //function to clear the tag
 
 function closeTag() {
+
     closeBtn.forEach(current => {
 
         current.addEventListener('click', (event) => {
+
             if (event.target.classList.contains('close')) {
+                updatePassArray(event.target.parentNode.firstElementChild.textContent);
 
 
-                if (!(event.target.parentNode === filterArea.firstElementChild)) {
-                    event.target.parentNode.remove();
-                } else clearFilters();
+                console.log('hello');
+                event.target.parentNode.remove();
 
             } else {
+                updatePassArray(event.target.parentNode.parentNode.firstElementChild.textContent);
 
-                if (!(event.target.parentNode.parentNode === filterArea.firstElementChild)) {
-                    event.target.parentNode.parentNode.remove();
-                } else clearFilters();
 
+                console.log('hello');
+                event.target.parentNode.parentNode.remove();
 
             }
-
+            if (filterArea.childElementCount === 0) {
+                clearFilters();
+            }
 
         })
 
     })
+}
 
+function updatePassArray(value) {
+    passArray.forEach((current, index, arr) => {
+        if (current === value) {
+            arr[index] = '';
+        }
+    })
 
 }
