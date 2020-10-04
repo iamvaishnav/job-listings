@@ -23,6 +23,7 @@ body {
     }
     .content {
         grid-column: 1/13;
+        min-height: 80vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -194,7 +195,7 @@ body {
         margin-bottom: 100px;
     }
     .filter-container {
-        display: flex;
+        display: none;
         flex-direction: row;
         justify-content: space-between;
         background: #fff;
