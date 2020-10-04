@@ -26,6 +26,7 @@ const items = document.querySelectorAll('.item');
 let closeBtn;
 let itemName;
 let passArray = [];
+let filteredItems = [];
 
 tags.forEach(current => {
     current.addEventListener('click', () => {
@@ -51,6 +52,7 @@ function applyFilters(tag) {
     closeBtn = document.querySelectorAll('.close');
     closeTag();
     itemsFilter(tag.textContent);
+    itemsHide();
 
 }
 
@@ -67,6 +69,7 @@ function clearFilters() {
 
     }
     passArray.splice(0, passArray.length);
+    filteredItems.splice(0, filteredItems.length);
 
     itemsShow();
 }
@@ -82,11 +85,13 @@ function closeTag() {
             if (event.target.classList.contains('close')) {
 
                 updatePassArray(event.target.parentNode.firstElementChild.textContent);
+                updateFilteredArray();
                 event.target.parentNode.remove();
 
             } else {
 
                 updatePassArray(event.target.parentNode.parentNode.firstElementChild.textContent);
+                updateFilteredArray();
                 event.target.parentNode.parentNode.remove();
 
             }
@@ -110,10 +115,50 @@ function updatePassArray(value) {
 
 }
 
+//function to update filtered items array
+
+function updateFilteredArray() {
+    let deletedItems = [];
+    filteredItems.forEach((current, index, arr) => {
+        let x = current.lastElementChild.children;
+        let count = 0;
+        for (let i = 0; i < x.length; i++) {
+            passArray.forEach(current => {
+                if (current === x[i].textContent) {
+                    count++;
+                }
+            })
+        }
+
+        if (count < 1) {
+            deletedItems.push(current);
+        }
+    })
+
+    for (let i = 0; i < deletedItems.length; i++) {
+        let index = filteredItems.indexOf(deletedItems[i]);
+        filteredItems.splice(index, 1);
+
+    }
+    deletedItems.splice(0, deletedItems.length);
+    itemsHide();
+}
+
 // function to hide items
 
 function itemsHide() {
-    items.forEach(current => current.style.display = 'none')
+
+    items.forEach(current => {
+
+        if (!(filteredItems.includes(current))) {
+
+            current.style.display = 'none';
+
+        } else {
+            current.style.display = 'grid'
+        }
+    })
+
 }
 
 // function to show all items
@@ -134,14 +179,23 @@ function itemsFilter(tag) {
 
         if (current.dataset.role === tag || current.dataset.level === tag) {
 
-            current.style.display = 'grid';
+            if (!(filteredItems.includes(current))) {
+
+                filteredItems.push(current);
+
+            }
 
         }
 
         languages.forEach(curr => {
 
             if (curr === tag) {
-                current.style.display = 'grid';
+
+                if (!(filteredItems.includes(current))) {
+
+                    filteredItems.push(current);
+
+                }
             }
 
         })
@@ -149,10 +203,16 @@ function itemsFilter(tag) {
         tools.forEach(curr => {
 
             if (curr === tag) {
-                current.style.display = 'grid';
+
+                if (!(filteredItems.includes(current))) {
+
+                    filteredItems.push(current);
+
+                }
             }
 
         })
 
     })
+
 }
